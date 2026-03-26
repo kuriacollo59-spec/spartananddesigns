@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spartan Designs — Nairobi</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Raleway:wght@200;300;400;600&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --dark: #111111;
+    --card: #161616;
+    --border: rgba(255,255,255,0.08);
+    --white: #f4f4f4;
+    --muted: #888;
+    --gold: #d4a843;
+    --gold-soft: #e8cb85;
+    --accent: #c0392b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'Raleway', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; }
+
+  /* CURSOR */
+  .cursor { position: fixed; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); }
+  .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(212,168,67,0.5); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: all 0.15s ease; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 2rem 5rem;
+    transition: all 0.4s;
+  }
+  nav.scrolled { background: rgba(10,10,10,0.97); border-bottom: 1px solid var(--border); padding: 1.4rem 5rem; }
+  .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.2em; color: var(--white); text-decoration: none; }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2.8rem; list-style: none; align-items: center; }
+  .nav-links a { font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta { padding: 0.7rem 1.8rem; border: 1px solid var(--gold); color: var(--gold) !important; transition: all 0.3s !important; font-size: 0.68rem !important; }
+  .nav-cta:hover { background: var(--gold) !important; color: var(--black) !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; padding: 0 5rem;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 15% 50%, rgba(212,168,67,0.07) 0%, transparent 50%),
+      radial-gradient(ellipse at 85% 20%, rgba(192,57,43,0.06) 0%, transparent 45%),
+      linear-gradient(170deg, #0a0a0a 0%, #121212 50%, #0a0a0a 100%);
+  }
+  /* Grid lines */
+  .hero-grid {
+    position: absolute; inset: 0; opacity: 0.03;
+    background-image: linear-gradient(var(--white) 1px, transparent 1px), linear-gradient(90deg, var(--white) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+  /* Diagonal accent */
+  .hero-slash {
+    position: absolute; top: -10%; right: 15%;
+    width: 3px; height: 130%;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    opacity: 0.12;
+    transform: rotate(12deg);
+  }
+  .hero-slash-2 {
+    position: absolute; top: -10%; right: 22%;
+    width: 1px; height: 130%;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    opacity: 0.06;
+    transform: rotate(12deg);
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 900px; }
+  @keyframes riseIn { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 1rem;
+    font-size: 0.62rem; letter-spacing: 0.45em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 2rem;
+    animation: riseIn 0.9s 0.2s ease both;
+  }
+  .hero-eyebrow::before { content: ''; width: 35px; height: 1px; background: var(--gold); opacity: 0.6; }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 9vw, 8.5rem);
+    line-height: 0.92; letter-spacing: 0.03em;
+    color: var(--white);
+    animation: riseIn 0.9s 0.4s ease both;
+  }
+  .hero-title .highlight { color: var(--gold); display: block; }
+  .hero-title .outline {
+    -webkit-text-stroke: 1px rgba(255,255,255,0.25);
+    color: transparent; display: block;
+  }
+
+  .hero-sub {
+    font-size: 1rem; color: var(--muted); line-height: 1.8;
+    max-width: 500px; margin: 2.5rem 0 3.5rem;
+    animation: riseIn 0.9s 0.6s ease both;
+    font-weight: 300;
+  }
+
+  .hero-buttons {
+    display: flex; gap: 1.2rem; flex-wrap: wrap;
+    animation: riseIn 0.9s 0.8s ease both;
+  }
+  .btn-gold { padding: 1rem 2.8rem; background: var(--gold); color: var(--black); font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; text-decoration: none; font-family: 'Raleway', sans-serif; font-weight: 600; transition: all 0.3s; border: none; cursor: none; }
+  .btn-gold:hover { background: var(--gold-soft); transform: translateY(-2px); box-shadow: 0 15px 40px rgba(212,168,67,0.2); }
+  .btn-ghost { padding: 1rem 2.8rem; border: 1px solid var(--border); color: var(--muted); font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase; text-decoration: none; font-family: 'Raleway', sans-serif; transition: all 0.3s; }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.3); color: var(--white); }
+
+  /* Floating stats */
+  .hero-stats {
+    position: absolute; right: 5rem; bottom: 6rem;
+    display: flex; flex-direction: column; gap: 2.5rem;
+    animation: riseIn 0.9s 1s ease both;
+  }
+  .hero-stat { text-align: right; }
+  .stat-big { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--gold); line-height: 1; letter-spacing: 0.05em; }
+  .stat-small { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-top: 0.2rem; }
+
+  /* Scroll hint */
+  .scroll-ind { position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.6rem; }
+  .scroll-ind span { font-size: 0.55rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--muted); opacity: 0.4; }
+  .scroll-line { width: 1px; height: 50px; background: linear-gradient(to bottom, var(--gold), transparent); animation: scrollDrop 2s ease-in-out infinite; }
+  @keyframes scrollDrop { 0% { transform: scaleY(0); transform-origin: top; opacity: 1; } 100% { transform: scaleY(1); transform-origin: top; opacity: 0; } }
+
+  /* SECTION BASE */
+  section { padding: 9rem 5rem; }
+  .section-tag { font-size: 0.6rem; letter-spacing: 0.45em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.8rem; }
+  .section-tag::before { content: ''; width: 25px; height: 1px; background: var(--gold); }
+  .section-heading { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: 1; letter-spacing: 0.04em; color: var(--white); }
+  .section-heading em { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 0.85em; }
+
+  /* SERVICES */
+  #services { background: var(--dark); position: relative; overflow: hidden; }
+  #services::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); opacity: 0.3; }
+  .services-top { max-width: 1100px; margin: 0 auto 5rem; display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; }
+  .services-top p { color: var(--muted); font-size: 0.9rem; line-height: 1.8; max-width: 380px; }
+  .services-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+  .service-card {
+    background: var(--dark); padding: 3.5rem 2.8rem;
+    position: relative; overflow: hidden; transition: background 0.4s;
+  }
+  .service-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(to right, var(--gold), var(--accent)); transform: scaleX(0); transition: transform 0.5s ease; transform-origin: left; }
+  .service-card:hover { background: var(--card); }
+  .service-card:hover::after { transform: scaleX(1); }
+  .service-icon { font-size: 2.2rem; margin-bottom: 2rem; display: block; }
+  .service-num { position: absolute; top: 2rem; right: 2.5rem; font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: rgba(255,255,255,0.04); letter-spacing: 0.05em; line-height: 1; }
+  .service-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.06em; color: var(--white); margin-bottom: 1rem; }
+  .service-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.9; margin-bottom: 2rem; }
+  .service-features { list-style: none; }
+  .service-features li { font-size: 0.75rem; color: var(--muted); padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); display: flex; align-items: center; gap: 0.6rem; }
+  .service-features li::before { content: '→'; color: var(--gold); font-size: 0.7rem; }
+
+  /* PORTFOLIO */
+  #portfolio { background: var(--black); }
+  .portfolio-top { max-width: 1100px; margin: 0 auto 4rem; display: flex; justify-content: space-between; align-items: flex-end; }
+  .portfolio-top a { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(212,168,67,0.4); padding-bottom: 2px; transition: border-color 0.3s; }
+  .portfolio-top a:hover { border-color: var(--gold); }
+  .portfolio-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+  .p-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    position: relative; overflow: hidden;
+    display: flex; flex-direction: column;
+    transition: border-color 0.4s, transform 0.4s;
+    text-decoration: none;
+    cursor: none;
+  }
+  .p-card:hover { border-color: rgba(212,168,67,0.4); transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+
+  /* Coloured preview window */
+  .p-card-preview {
+    width: 100%; aspect-ratio: 16/10;
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 1rem;
+  }
+  .p-card:nth-child(1) .p-card-preview { background: linear-gradient(135deg, #1e120a 0%, #3d2b1f 50%, #1e120a 100%); }
+  .p-card:nth-child(2) .p-card-preview { background: linear-gradient(135deg, #0d0b10 0%, #3d2d5c 50%, #0d0b10 100%); }
+  .p-card:nth-child(3) .p-card-preview { background: linear-gradient(135deg, #060608 0%, #0c1a2e 50%, #060608 100%); }
+
+  /* Fake browser chrome */
+  .p-browser-bar {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 28px; background: rgba(0,0,0,0.5);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: center; padding: 0 10px; gap: 5px;
+  }
+  .p-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .p-dot:nth-child(1) { background: #ff5f57; }
+  .p-dot:nth-child(2) { background: #febc2e; }
+  .p-dot:nth-child(3) { background: #28c840; }
+  .p-url { flex: 1; margin: 0 10px; height: 14px; background: rgba(255,255,255,0.06); border-radius: 3px; display: flex; align-items: center; padding: 0 8px; font-size: 0.55rem; color: rgba(255,255,255,0.25); letter-spacing: 0.05em; overflow: hidden; }
+
+  .p-preview-icon { font-size: 3.5rem; opacity: 0.35; margin-top: 1.5rem; transition: transform 0.4s, opacity 0.4s; }
+  .p-card:hover .p-preview-icon { transform: scale(1.15); opacity: 0.55; }
+  .p-preview-label { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 0.2em; color: rgba(255,255,255,0.15); text-transform: uppercase; }
+
+  /* Visit overlay on hover */
+  .p-hover-overlay {
+    position: absolute; inset: 0;
+    background: rgba(212,168,67,0.08);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.4s;
+  }
+  .p-card:hover .p-hover-overlay { opacity: 1; }
+  .p-visit-btn {
+    padding: 0.7rem 1.8rem;
+    background: var(--gold); color: var(--black);
+    font-size: 0.65rem; letter-spacing: 0.25em;
+    text-transform: uppercase; font-family: 'Raleway', sans-serif;
+    font-weight: 600; display: flex; align-items: center; gap: 0.5rem;
+    transform: translateY(8px); transition: transform 0.4s;
+  }
+  .p-card:hover .p-visit-btn { transform: translateY(0); }
+
+  /* Card body */
+  .p-card-body { padding: 1.8rem 2rem; flex: 1; border-top: 1px solid var(--border); }
+  .p-card-tag { font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+  .p-card-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 0.08em; color: var(--white); margin-bottom: 0.6rem; }
+  .p-card-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.2rem; }
+  .p-card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid var(--border); }
+  .p-card-tech { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .p-tech-tag { padding: 0.2rem 0.6rem; background: rgba(255,255,255,0.04); border: 1px solid var(--border); font-size: 0.58rem; letter-spacing: 0.1em; color: var(--muted); }
+  .p-card-arrow { font-size: 1rem; color: var(--gold); transition: transform 0.3s; }
+  .p-card:hover .p-card-arrow { transform: translate(3px, -3px); }
+
+  /* WHY US */
+  #why { background: var(--dark); position: relative; }
+  #why::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); opacity: 0.2; }
+  .why-wrap { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 8rem; align-items: center; }
+  .why-text .section-heading { margin: 1rem 0 2rem; }
+  .why-text p { color: var(--muted); line-height: 2; font-size: 0.9rem; margin-bottom: 2rem; }
+  .why-list { list-style: none; display: flex; flex-direction: column; gap: 1.2rem; }
+  .why-list li { display: flex; align-items: center; gap: 1.2rem; font-size: 0.82rem; color: var(--muted); }
+  .why-list li::before { content: '✓'; width: 28px; height: 28px; background: rgba(212,168,67,0.1); border: 1px solid rgba(212,168,67,0.3); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; flex-shrink: 0; }
+  .why-visual { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5px; background: var(--border); }
+  .why-stat-card { background: var(--card); padding: 2.5rem 2rem; }
+  .why-stat-card:nth-child(1) { background: var(--gold); }
+  .why-stat-card:nth-child(1) .ws-num { color: var(--black); }
+  .why-stat-card:nth-child(1) .ws-label { color: rgba(0,0,0,0.6); }
+  .ws-num { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; color: var(--gold); line-height: 1; letter-spacing: 0.05em; }
+  .ws-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 0.5rem; }
+
+  /* CTA */
+  #cta {
+    background: var(--black); position: relative; overflow: hidden;
+    padding: 10rem 5rem;
+    text-align: center;
+  }
+  #cta::before { content: ''; position: absolute; top: -200px; left: 50%; transform: translateX(-50%); width: 800px; height: 800px; border-radius: 50%; background: radial-gradient(circle, rgba(212,168,67,0.06) 0%, transparent 70%); }
+  .cta-inner { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+  .cta-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 7vw, 6rem); line-height: 1; letter-spacing: 0.04em; color: var(--white); margin: 1rem 0 1.5rem; }
+  .cta-title span { color: var(--gold); }
+  .cta-sub { color: var(--muted); font-size: 0.9rem; line-height: 1.8; margin-bottom: 3.5rem; max-width: 450px; margin-left: auto; margin-right: auto; }
+  .btn-whatsapp { display: inline-flex; align-items: center; gap: 0.8rem; padding: 1.2rem 3rem; background: #25D366; color: #000; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; font-family: 'Raleway', sans-serif; font-weight: 600; transition: all 0.3s; margin-bottom: 1.5rem; }
+  .btn-whatsapp:hover { background: #1ebe5d; transform: translateY(-2px); box-shadow: 0 15px 40px rgba(37,211,102,0.25); }
+  .cta-note { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.08em; }
+  .cta-note a { color: var(--gold); text-decoration: none; }
+
+  /* FOOTER */
+  footer { background: #060606; padding: 4rem 5rem 2.5rem; border-top: 1px solid var(--border); }
+  .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
+  .footer-brand .nav-logo { font-size: 1.4rem; display: block; margin-bottom: 0.8rem; }
+  .footer-brand p { color: var(--muted); font-size: 0.8rem; }
+  .footer-links { display: flex; gap: 2.5rem; }
+  .footer-links a { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--white); }
+  .footer-bottom { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; font-size: 0.7rem; color: rgba(136,136,136,0.4); letter-spacing: 0.08em; }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.9s ease, transform 0.9s ease; }
+  .reveal-left { opacity: 0; transform: translateX(-30px); transition: opacity 0.9s ease, transform 0.9s ease; }
+  .reveal-right { opacity: 0; transform: translateX(30px); transition: opacity 0.9s ease, transform 0.9s ease; }
+  .reveal.visible, .reveal-left.visible, .reveal-right.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 900px) {
+    nav, nav.scrolled { padding: 1.5rem; }
+    .nav-links { display: none; }
+    section, #cta { padding: 5rem 1.5rem; }
+    .hero { padding: 0 1.5rem; }
+    .hero-stats { display: none; }
+    .services-top, .portfolio-top { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .services-grid, .portfolio-grid { grid-template-columns: 1fr; }
+    .why-wrap { grid-template-columns: 1fr; gap: 4rem; }
+    .why-visual { grid-template-columns: 1fr 1fr; }
+    .footer-inner { flex-direction: column; }
+    .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">SPARTAN<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#portfolio">Work</a></li>
+    <li><a href="#why">Why Us</a></li>
+    <li><a href="#cta" class="nav-cta">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-slash"></div>
+  <div class="hero-slash-2"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Nairobi, Kenya — Web Design Studio</div>
+    <h1 class="hero-title">
+      We Build
+      <span class="highlight">Websites</span>
+      <span class="outline">That Convert</span>
+    </h1>
+    <p class="hero-sub">Modern, high-performing websites for restaurants, bars, spas and businesses across Kenya and beyond.</p>
+    <div class="hero-buttons">
+      <a href="#portfolio" class="btn-gold">View Our Work</a>
+      <a href="#cta" class="btn-ghost">Get a Free Quote</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="stat-big">30+</div>
+      <div class="stat-small">Sites Delivered</div>
+    </div>
+    <div class="hero-stat">
+      <div class="stat-big">3</div>
+      <div class="stat-small">Industries Served</div>
+    </div>
+    <div class="hero-stat">
+      <div class="stat-big">100%</div>
+      <div class="stat-small">Client Satisfaction</div>
+    </div>
+  </div>
+  <div class="scroll-ind">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-top reveal">
+    <div>
+      <div class="section-tag">What We Do</div>
+      <h2 class="section-heading">Our <em>Services</em></h2>
+    </div>
+    <p>We craft high-converting, beautifully designed websites for businesses that want to stand out and attract more customers online.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-num">01</div>
+      <span class="service-icon">🍽️</span>
+      <div class="service-name">Restaurant Websites</div>
+      <div class="service-desc">Mouth-watering designs that showcase your menu, drive reservations and bring hungry customers through your door.</div>
+      <ul class="service-features">
+        <li>Interactive digital menu</li>
+        <li>Online reservation system</li>
+        <li>Google Maps integration</li>
+        <li>Mobile-first design</li>
+      </ul>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-num">02</div>
+      <span class="service-icon">🍸</span>
+      <div class="service-name">Bar & Nightlife</div>
+      <div class="service-desc">Bold, electric designs built for venues that want to pack their space every night of the week.</div>
+      <ul class="service-features">
+        <li>Event & gig listings</li>
+        <li>Drinks & cocktail menu</li>
+        <li>Gallery & vibe showcase</li>
+        <li>Table & VIP booking</li>
+      </ul>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-num">03</div>
+      <span class="service-icon">🌿</span>
+      <div class="service-name">Spa & Wellness</div>
+      <div class="service-desc">Serene, luxury designs that reflect your brand's calm and convert visitors into loyal, returning clients.</div>
+      <ul class="service-features">
+        <li>Services & pricing page</li>
+        <li>Online appointment booking</li>
+        <li>Gallery & ambience showcase</li>
+        <li>WhatsApp integration</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="portfolio-top reveal">
+    <div>
+      <div class="section-tag">Our Work</div>
+      <h2 class="section-heading">Recent <em>Projects</em></h2>
+    </div>
+    <a href="#cta">Start your project →</a>
+  </div>
+  <div class="portfolio-grid">
+
+    <!-- PROJECT 1 — Restaurant -->
+    <!-- 🔁 Replace YOUR-USERNAME with your GitHub username -->
+    <a class="p-card reveal" href="https://kuriacollo59-spec.github.io/ember/" target="_blank" rel="noopener">
+      <div class="p-card-preview">
+        <div class="p-browser-bar">
+          <div class="p-dot"></div><div class="p-dot"></div><div class="p-dot"></div>
+          <div class="p-url">kuriacollo59-spec.github.io/ember</div>
+        </div>
+        <div class="p-preview-icon">🍽️</div>
+        <div class="p-preview-label">Ember & Stone</div>
+        <div class="p-hover-overlay">
+          <div class="p-visit-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            View Live Site
+          </div>
+        </div>
+      </div>
+      <div class="p-card-body">
+        <div class="p-card-tag">Fine Dining Restaurant</div>
+        <div class="p-card-name">Ember & Stone</div>
+        <div class="p-card-desc">Luxury restaurant website with interactive menu, reservation CTA and warm earthy aesthetic.</div>
+        <div class="p-card-footer">
+          <div class="p-card-tech">
+            <span class="p-tech-tag">HTML</span>
+            <span class="p-tech-tag">CSS</span>
+            <span class="p-tech-tag">JS</span>
+          </div>
+          <span class="p-card-arrow">↗</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- PROJECT 2 — Spa -->
+    <!-- 🔁 Replace YOUR-USERNAME with your GitHub username -->
+    <a class="p-card reveal" href="https://kuriacollo59-spec.github.io/spa/" target="_blank" rel="noopener">
+      <div class="p-card-preview">
+        <div class="p-browser-bar">
+          <div class="p-dot"></div><div class="p-dot"></div><div class="p-dot"></div>
+          <div class="p-url">kuriacollo59-spec.github.io/spa</div>
+        </div>
+        <div class="p-preview-icon">🖤</div>
+        <div class="p-preview-label">Velour Spa</div>
+        <div class="p-hover-overlay">
+          <div class="p-visit-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            View Live Site
+          </div>
+        </div>
+      </div>
+      <div class="p-card-body">
+        <div class="p-card-tag">Spa & Wellness</div>
+        <div class="p-card-name">Velour Luxury Spa</div>
+        <div class="p-card-desc">Dark moody luxury spa with services, pricing, booking form and custom animated cursor.</div>
+        <div class="p-card-footer">
+          <div class="p-card-tech">
+            <span class="p-tech-tag">HTML</span>
+            <span class="p-tech-tag">CSS</span>
+            <span class="p-tech-tag">JS</span>
+          </div>
+          <span class="p-card-arrow">↗</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- PROJECT 3 — Bar -->
+    <!-- 🔁 Replace YOUR-USERNAME with your GitHub username -->
+    <a class="p-card reveal" href="https://kuriacollo59-spec.github.io/bar/" target="_blank" rel="noopener">
+      <div class="p-card-preview">
+        <div class="p-browser-bar">
+          <div class="p-dot"></div><div class="p-dot"></div><div class="p-dot"></div>
+          <div class="p-url">kuriacollo59-spec.github.io/bar</div>
+        </div>
+        <div class="p-preview-icon">⚡</div>
+        <div class="p-preview-label">Volt Bar</div>
+        <div class="p-hover-overlay">
+          <div class="p-visit-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            View Live Site
+          </div>
+        </div>
+      </div>
+      <div class="p-card-body">
+        <div class="p-card-tag">Bar & Nightlife</div>
+        <div class="p-card-name">Volt Bar</div>
+        <div class="p-card-desc">Electric nightlife bar with neon aesthetic, drinks menu tabs, bottle service packages and VIP booking.</div>
+        <div class="p-card-footer">
+          <div class="p-card-tech">
+            <span class="p-tech-tag">HTML</span>
+            <span class="p-tech-tag">CSS</span>
+            <span class="p-tech-tag">JS</span>
+          </div>
+          <span class="p-card-arrow">↗</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="why">
+  <div class="why-wrap">
+    <div class="why-text reveal-left">
+      <div class="section-tag">Why Spartan</div>
+      <h2 class="section-heading">Built to<br><em>perform</em></h2>
+      <p>We don't just build pretty websites. Every site we deliver is fast, mobile-optimised and designed to turn visitors into paying customers.</p>
+      <ul class="why-list">
+        <li>Fast turnaround — most sites delivered in 7 days</li>
+        <li>Mobile-first — looks perfect on every device</li>
+        <li>SEO-ready — built to rank on Google</li>
+        <li>Local expertise — we understand the Nairobi market</li>
+        <li>Affordable pricing — no hidden fees</li>
+        <li>Ongoing support — we don't disappear after launch</li>
+      </ul>
+    </div>
+    <div class="why-visual reveal-right">
+      <div class="why-stat-card">
+        <div class="ws-num">7</div>
+        <div class="ws-label">Days avg. delivery</div>
+      </div>
+      <div class="why-stat-card">
+        <div class="ws-num">30+</div>
+        <div class="ws-label">Sites launched</div>
+      </div>
+      <div class="why-stat-card">
+        <div class="ws-num">3x</div>
+        <div class="ws-label">More online enquiries</div>
+      </div>
+      <div class="why-stat-card">
+        <div class="ws-num">100%</div>
+        <div class="ws-label">Mobile optimised</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-inner reveal">
+    <div class="section-tag" style="justify-content:center">Let's Work Together</div>
+    <h2 class="cta-title">Ready to build<br>your <span>website?</span></h2>
+    <p class="cta-sub">Get a modern website that attracts more customers and grows your business. Message us today — response within 1 hour.</p>
+    <br>
+    <a href="https://wa.me/254713228255" class="btn-whatsapp">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Message on WhatsApp
+    </a>
+    <p class="cta-note">Call or WhatsApp: <a href="tel:+254713228255">+254 713 228 255</a> &nbsp;·&nbsp; <a href="tel:+254782553127">+254 782 553 127</a></p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">SPARTAN<span style="color:var(--gold)">.</span></a>
+      <p>Nairobi's web design studio for hospitality & wellness brands.</p>
+    </div>
+    <div class="footer-links">
+      <a href="#services">Services</a>
+      <a href="#portfolio">Work</a>
+      <a href="#why">Why Us</a>
+      <a href="#cta">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>Spartan Designs © 2025 | Nairobi, Kenya</span>
+    <span>Built with 🔥 in Kenya</span>
+  </div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  });
+  function animRing() {
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+
+  // Nav
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Reveal
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 100);
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
